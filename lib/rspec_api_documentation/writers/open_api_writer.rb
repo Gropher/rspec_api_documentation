@@ -126,7 +126,11 @@ module RspecApiDocumentation
       end
 
       def extract_schema(fields)
-        schema = {type: 'object', properties: {}}
+        schema = if fields.any? 
+                   {type: 'object', properties: {}}
+                 else
+                   {type: 'string'}
+                 end
 
         fields.each do |field|
           current = schema
