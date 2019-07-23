@@ -128,7 +128,7 @@ module RspecApiDocumentation
       end
 
       def extract_schema(fields, response_type='object')
-        return unless fields.any?
+        return OpenApi::Schema.new unless fields.any?
         schema = {type: 'object', properties: {}}
 
         fields.each do |field|

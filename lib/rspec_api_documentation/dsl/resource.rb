@@ -122,6 +122,10 @@ module RspecApiDocumentation::DSL
         safe_metadata(:response_fields, [])
       end
 
+      def response_type value
+        safe_metadata(:response_type, value)
+      end
+
       def headers
         safe_metadata(:headers, {})
       end
