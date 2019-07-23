@@ -102,7 +102,9 @@ module RspecApiDocumentation
       end
 
       def process_responses(responses, example)
-        schema = extract_schema(example.respond_to?(:response_fields) ? example.response_fields : [])
+        response_fields = example.respond_to?(:response_fields) ? example.response_fields : []
+        response_type = example.respond_to?(:response_type) ? example.response_type : 'object'
+        schema = extract_schema(response_fields, response_type)
         example.requests.each do |request|
           response = OpenApi::Response.new(
             description: example.description,
@@ -125,12 +127,9 @@ module RspecApiDocumentation
         end
       end
 
-      def extract_schema(fields)
-        schema = if fields.any? 
-                   {type: 'object', properties: {}}
-                 else
-                   {type: 'string'}
-                 end
+      def extract_schema(fields, response_type='object')
+        return unless fields.any?
+        schema = {type: 'object', properties: {}}
 
         fields.each do |field|
           current = schema
@@ -157,6 +156,10 @@ module RspecApiDocumentation
             current[:required] ||= []
             current[:required] << field[:name]
           end
+        end
+
+        if response_type == 'array'
+          schema = {type: 'array', items: schema}
         end
 
         OpenApi::Schema.new(schema)
