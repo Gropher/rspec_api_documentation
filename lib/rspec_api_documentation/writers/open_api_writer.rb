@@ -158,7 +158,7 @@ module RspecApiDocumentation
           end
         end
 
-        if response_type == 'array'
+        if response_type == :array
           schema = {type: 'array', items: schema}
         end
 
