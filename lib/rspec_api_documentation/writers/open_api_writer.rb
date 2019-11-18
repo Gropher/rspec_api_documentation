@@ -199,7 +199,7 @@ module RspecApiDocumentation
       def extract_unknown_parameters(example, parameters)
         if example.http_method == :get
           parameters.map { |parameter| extract_parameter(parameter.merge(in: :query)) }
-        elsif parameters.any? { |parameter| !parameter[:scope].nil? }
+        elsif parameters.any? { |parameter| !parameter[:scope].nil? } or parameters.any? { |parameter| parameter[:type] == :array }
           [OpenApi::Parameter.new(
             name:        :body,
             in:          :body,
